@@ -3,7 +3,8 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
-
+use App\Models\Driver;
+use App\Models\Customer;
 return new class extends Migration
 {
     /**
@@ -13,6 +14,11 @@ return new class extends Migration
     {
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
+            $table->foreignIdFor(Driver::class)->constrained('drivers');
+            $table->foreignIdFor(Customer::class)->constrained('customers');
+            $table->float('total');
+            $table->dateTime('start');
+            $table->dateTime('finish');
             $table->timestamps();
         });
     }

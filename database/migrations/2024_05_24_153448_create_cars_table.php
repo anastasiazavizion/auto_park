@@ -3,7 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
-
+use App\Models\Park;
 return new class extends Migration
 {
     /**
@@ -13,6 +13,9 @@ return new class extends Migration
     {
         Schema::create('cars', function (Blueprint $table) {
             $table->id();
+            $table->string('model');
+            $table->float('price');
+            $table->foreignIdFor(Park::class)->constrained('parks');
             $table->timestamps();
         });
     }
