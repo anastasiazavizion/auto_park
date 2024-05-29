@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Factories\Factory;
  */
 class CarFactory extends Factory
 {
+    private static $models = ['Toyota Prado'=>2000, 'Lanos'=>500, 'Corrola'=>1000, 'Nissan Juke'=>1500];
     /**
      * Define the model's default state.
      *
@@ -16,8 +17,11 @@ class CarFactory extends Factory
      */
     public function definition(): array
     {
+        $randomKey = array_rand(self::$models);
         return [
-            //
+            'model'=>$randomKey,
+            'price'=>self::$models[$randomKey],
+            'park_id'=>1
         ];
     }
 }
