@@ -9,8 +9,8 @@ services:
         extra_hosts:
             - 'host.docker.internal:host-gateway'
         ports:
-            - '${APP_PORT:-80}:80'
-            - '${VITE_PORT:-5173}:${VITE_PORT:-5173}'
+            - '8081:80'
+            - '${VITE_PORT:-5174}:${VITE_PORT:-5174}'
         environment:
             WWWUSER: '${WWWUSER}'
             LARAVEL_SAIL: 1
@@ -20,7 +20,7 @@ services:
         volumes:
             - '.:/var/www/html'
         networks:
-            - sail
+            - sail2
         depends_on:
             - mysql
             - redis
@@ -30,7 +30,7 @@ services:
     mysql:
         image: 'mysql/mysql-server:8.0'
         ports:
-            - '${FORWARD_DB_PORT:-3306}:3306'
+            - '8889:3306'
         environment:
             MYSQL_ROOT_PASSWORD: 'password'
             MYSQL_ROOT_HOST: '%'
@@ -42,7 +42,7 @@ services:
             - 'sail-mysql:/var/lib/mysql'
             - './vendor/laravel/sail/database/mysql/create-testing-database.sh:/docker-entrypoint-initdb.d/10-create-testing-database.sh'
         networks:
-            - sail
+            - sail2
         healthcheck:
             test:
                 - CMD
@@ -54,11 +54,11 @@ services:
     redis:
         image: 'redis:alpine'
         ports:
-            - '${FORWARD_REDIS_PORT:-6379}:6379'
+            - '${FORWARD_REDIS_PORT:-6381}:6379'
         volumes:
             - 'sail-redis:/data'
         networks:
-            - sail
+            - sail2
         healthcheck:
             test:
                 - CMD
@@ -69,13 +69,13 @@ services:
     meilisearch:
         image: 'getmeili/meilisearch:latest'
         ports:
-            - '${FORWARD_MEILISEARCH_PORT:-7700}:7700'
+            - '${FORWARD_MEILISEARCH_PORT:-7701}:7700'
         environment:
             MEILI_NO_ANALYTICS: '${MEILISEARCH_NO_ANALYTICS:-false}'
         volumes:
             - 'sail-meilisearch:/meili_data'
         networks:
-            - sail
+            - sail2
         healthcheck:
             test:
                 - CMD
@@ -88,10 +88,10 @@ services:
     mailpit:
         image: 'axllent/mailpit:latest'
         ports:
-            - '${FORWARD_MAILPIT_PORT:-1025}:1025'
-            - '${FORWARD_MAILPIT_DASHBOARD_PORT:-8025}:8025'
+            - '${FORWARD_MAILPIT_PORT:-1026}:1025'
+            - '${FORWARD_MAILPIT_DASHBOARD_PORT:-8026}:8025'
         networks:
-            - sail
+            - sail2
     selenium:
         image: selenium/standalone-chrome
         extra_hosts:
@@ -99,9 +99,9 @@ services:
         volumes:
             - '/dev/shm:/dev/shm'
         networks:
-            - sail
+            - sail2
 networks:
-    sail:
+    sail2:
         driver: bridge
 volumes:
     sail-mysql:
