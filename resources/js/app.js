@@ -8,9 +8,16 @@ import { ZiggyVue } from '../../vendor/tightenco/ziggy';
 
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 
+import MainLayout from '@/Layouts/MainLayout.vue';
+
 createInertiaApp({
     title: (title) => `${title} - ${appName}`,
-    resolve: (name) => resolvePageComponent(`./Pages/${name}.vue`, import.meta.glob('./Pages/**/*.vue')),
+    resolve: (name) => {
+        const pages = import.meta.glob('./Pages/**/*.vue', { eager: true })
+        const page = pages[`./Pages/${name}.vue`]
+        page.default.layout = page.default.layout || MainLayout
+        return page
+    },
     setup({ el, App, props, plugin }) {
         return createApp({ render: () => h(App, props) })
             .use(plugin)

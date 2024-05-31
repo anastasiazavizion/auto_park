@@ -20,18 +20,22 @@ class DatabaseSeeder extends Seeder
     {
         // User::factory(10)->create();
 
-        User::factory()->create([
+     /*   User::factory()->create([
             'name' => 'Test User',
             'email' => 'test@example.com',
-        ]);
+        ]);*/
 
 
         Park::factory(5)->create()->each(function ($park){
-            Car::factory(5)->create(['park_id'=>$park->id])->each(function ($car){
-                Driver::factory()->create(['car_id'=>$car->id]);
-            });
-        });
 
+            $driver = Driver::factory()->create();
+
+            Car::factory(2)->create(['park_id'=>$park->id])->each(function ($car) use ($driver){
+                $car->drivers()->attach($driver);
+            });
+
+
+        });
         $drivers = Driver::all();
         Customer::factory(10)->create()->each(function ($customer) use ($drivers){
             Order::factory(2)->create([
@@ -39,14 +43,6 @@ class DatabaseSeeder extends Seeder
                 'driver_id'=>$drivers->random()->id
             ]);
         });
-
-
-
-
-
-
-
-
 
 
     }

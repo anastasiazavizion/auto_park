@@ -19,7 +19,6 @@ class DriverFactory extends Factory
         return [
             'name'=>fake()->name,
             'phone'=>fake()->phoneNumber,
-            'car_id'=>1
         ];
     }
 }

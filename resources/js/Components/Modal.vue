@@ -31,11 +31,16 @@ watch(
 
 const close = () => {
     if (props.closeable) {
+        console.log('emit close');
         emit('close');
     }
 };
 
 const closeOnEscape = (e) => {
+    console.log(e);
+
+    console.log(e.key === 'Escape' && props.show);
+
     if (e.key === 'Escape' && props.show) {
         close();
     }

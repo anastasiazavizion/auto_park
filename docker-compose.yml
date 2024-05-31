@@ -92,6 +92,13 @@ services:
             - '${FORWARD_MAILPIT_DASHBOARD_PORT:-8026}:8025'
         networks:
             - sail2
+    adminer:
+        image: adminer
+        restart: always
+        ports:
+            - 8085:8080
+        networks:
+            - sail2
     selenium:
         image: selenium/standalone-chrome
         extra_hosts:

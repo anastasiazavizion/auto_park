@@ -4,6 +4,8 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 use App\Models\Car;
+use App\Models\Driver;
+
 return new class extends Migration
 {
     /**
@@ -11,11 +13,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('drivers', function (Blueprint $table) {
+        Schema::create('car_driver', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('phone');
             $table->foreignIdFor(Car::class)->constrained('cars');
+            $table->foreignIdFor(Driver::class)->constrained('drivers');
             $table->timestamps();
         });
     }
@@ -25,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('drivers');
+        Schema::dropIfExists('car_driver');
     }
 };

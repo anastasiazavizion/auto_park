@@ -21,7 +21,6 @@ class CarFactory extends Factory
         return [
             'model'=>$randomKey,
             'price'=>self::$models[$randomKey],
-            'park_id'=>1
         ];
     }
 }
