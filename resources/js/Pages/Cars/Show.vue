@@ -23,7 +23,7 @@ function closeModal(){
 </div>
 
 <div>
-    Price: {{props.car.model}}
+    Price: {{props.car.price}}
 </div>
 
 <div>
@@ -38,7 +38,7 @@ function closeModal(){
 </div>
 
 <div>
-      <PrimaryButton>RENT</PrimaryButton>
+      <PrimaryButton @click="show = true">RENT</PrimaryButton>
 </div>
 
 <Modal @close="closeModal" :show="show" :closeable="true">
