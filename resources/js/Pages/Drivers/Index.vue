@@ -1,28 +1,12 @@
 <script setup>
-import Card from "@/Components/Card.vue";
-import { Link } from '@inertiajs/vue3';
-
+import DriverDetails from "@/Pages/Drivers/Partials/DriverDetails.vue";
 const props = defineProps({
-    cars:Array
+    drivers:Array
 })
 </script>
 
 <template>
-    <div :v-key="car.id" v-for="car in cars">
-        <Card>
-            <div class="flex justify-between">
-                <div class="font-bold">Model</div>
-                <div><Link :href="route('cars.show',car.id)">{{car.model}}</Link></div>
-            </div>
-            <div class="flex justify-between">
-                <div>Park</div>
-                <div>{{car.park.address}}</div>
-            </div>
-        </Card>
+    <div :v-key="driver.id" v-for="driver in props.drivers">
+       <DriverDetails :driver="driver"/>
     </div>
-
 </template>
-
-<style scoped>
-
-</style>

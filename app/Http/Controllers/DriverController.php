@@ -12,7 +12,7 @@ class DriverController extends Controller
      */
     public function index()
     {
-        //
+        return inertia('Drivers/Index', ['drivers'=>Driver::with('cars')->get()]);
     }
 
     /**
