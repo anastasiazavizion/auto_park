@@ -1,22 +1,3 @@
-<script setup>
-import DriverInfo from "@/Pages/Drivers/Partials/DriverInfo.vue";
-import PrimaryButton from "@/Components/PrimaryButton.vue";
-import Modal from "@/Components/Modal.vue";
-import {ref} from "vue";
-
-const props = defineProps({
-    car:Object
-})
-
-const show = ref(false);
-
-function closeModal(){
-    console.log('closeModal');
-    show.value = false;
-
-}
-</script>
-
 <template>
 <div>
     Model: {{props.car.model}}
@@ -31,14 +12,18 @@ function closeModal(){
 </div>
 
 <div>
-    Drivers:
-    <div v-for="driver in props.car.drivers">
-        <DriverInfo :driver="driver"/>
-    </div>
+   <div>
+
+       <v-select v-model="form.driver" :item-props="itemProps" :items="props.car.drivers" label="Driver"></v-select>
+
+
+   </div>
 </div>
 
 <div>
-      <PrimaryButton @click="show = true">RENT</PrimaryButton>
+    <form  @submit.prevent="checkout">
+        <PrimaryButton type="submit">Rent</PrimaryButton>
+    </form>
 </div>
 
 <Modal @close="closeModal" :show="show" :closeable="true">
@@ -48,6 +33,46 @@ function closeModal(){
 
 </template>
 
-<style scoped>
+<script setup>
+import DriverInfo from "@/Pages/Drivers/Partials/DriverInfo.vue";
+import PrimaryButton from "@/Components/PrimaryButton.vue";
+import Modal from "@/Components/Modal.vue";
+import {ref} from "vue";
+import { Link ,useForm} from '@inertiajs/vue3';
 
-</style>
+const props = defineProps({
+    car:Object
+})
+const selectedDriverId = ref(null);
+const show = ref(false);
+
+function closeModal(){
+    console.log('closeModal');
+    show.value = false;
+}
+
+const form = useForm({
+    car_id: props.car.id,
+    price: props.car.price,
+    model: props.car.model,
+    driver:''
+});
+
+function checkout(){
+
+    console.log(form.driver);
+
+    form.post(route('order.checkout'), {
+        onSuccess: (page) => {
+
+        },
+    });
+}
+
+function itemProps(item) {
+    return {
+        title: item.name,
+    }
+}
+
+</script>

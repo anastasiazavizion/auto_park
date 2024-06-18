@@ -20,10 +20,10 @@ class DatabaseSeeder extends Seeder
     {
         // User::factory(10)->create();
 
-     /*   User::factory()->create([
+        User::factory()->create([
             'name' => 'Test User',
             'email' => 'test@example.com',
-        ]);*/
+        ]);
 
 
         Park::factory(5)->create()->each(function ($park){
@@ -34,14 +34,6 @@ class DatabaseSeeder extends Seeder
                 $car->drivers()->attach($driver);
             });
 
-
-        });
-        $drivers = Driver::all();
-        Customer::factory(10)->create()->each(function ($customer) use ($drivers){
-            Order::factory(2)->create([
-                'customer_id'=>$customer,
-                'driver_id'=>$drivers->random()->id
-            ]);
         });
 
 

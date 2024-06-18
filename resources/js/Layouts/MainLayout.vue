@@ -32,6 +32,14 @@ const showingNavigationDropdown = ref(false);
                                 <NavLink :href="route('dashboard')" :active="route().current('dashboard')">
                                     Dashboard
                                 </NavLink>
+
+                                <NavLink :href="route('cars.index')" :active="route().current('cars.index')">
+                                    Cars
+                                </NavLink>
+
+                                <NavLink :href="route('cars.index')" :active="route().current('cars.index')">
+                                    Drivers
+                                </NavLink>
                             </div>
                         </div>
 
@@ -40,12 +48,12 @@ const showingNavigationDropdown = ref(false);
                             <div class="ms-3 relative">
                                 <Dropdown align="right" width="48">
                                     <template #trigger>
-                                        <span class="inline-flex rounded-md">
+                                        <span class="inline-flex rounded-md"  v-if="$page.props.auth.user">
                                             <button
                                                 type="button"
                                                 class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150"
                                             >
-<!--                                                {{ $page.props.auth.user.name }}-->
+                                             {{ $page.props.auth.user.name }}
 
                                                 <svg
                                                     class="ms-2 -me-0.5 h-4 w-4"
@@ -144,7 +152,7 @@ const showingNavigationDropdown = ref(false);
             </header>
 
             <!-- Page Content -->
-            <main class="container mx-auto p-4 max-w-2xl">
+            <main class="container mx-auto p-4 max-w-7xl">
                 <slot />
             </main>
         </div>
