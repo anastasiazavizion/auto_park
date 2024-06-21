@@ -34,4 +34,9 @@ class Car extends Model
         return $query->with('drivers');
 
     }
+    public function orders(): HasMany
+    {
+        return $this->hasMany(Order::class);
+
+    }
 }
