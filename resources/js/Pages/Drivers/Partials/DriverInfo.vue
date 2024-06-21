@@ -7,7 +7,7 @@ import { Link } from '@inertiajs/vue3';
 </script>
 
 <template>
-    <div>Driver</div>
+    <div>{{$t('Driver')}}</div>
     <div><Link :href="route('drivers.show',props.driver.id)">{{props.driver.name}}, {{props.driver.phone}}</Link></div>
 </template>
 

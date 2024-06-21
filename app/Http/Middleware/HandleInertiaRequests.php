@@ -29,8 +29,14 @@ class HandleInertiaRequests extends Middleware
      */
     public function share(Request $request): array
     {
+        $availableLocales = [
+            'en'=>asset('/images/languages/en.png'),
+            'ua'=>asset('/images/languages/ua.png'),
+        ];
         return [
             ...parent::share($request),
+            'currentLocale'=>session()->get('locale') ?? '',
+            'availableLocales'=>$availableLocales,
             'auth' => [
                 'user' => $request->user(),
             ],

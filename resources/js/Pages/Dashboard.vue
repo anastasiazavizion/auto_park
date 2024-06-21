@@ -2,8 +2,4 @@
 </script>
 
 <template>
-
-dashboard
-
-
 </template>

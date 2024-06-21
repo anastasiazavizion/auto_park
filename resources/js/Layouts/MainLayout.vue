@@ -1,13 +1,36 @@
 <script setup>
-import { ref } from 'vue';
+import {computed, ref} from 'vue';
 import ApplicationLogo from '@/Components/ApplicationLogo.vue';
 import Dropdown from '@/Components/Dropdown.vue';
 import DropdownLink from '@/Components/DropdownLink.vue';
 import NavLink from '@/Components/NavLink.vue';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink.vue';
-import { Link } from '@inertiajs/vue3';
+import {Link, router, usePage} from '@inertiajs/vue3';
 
+
+let page = usePage()
+let currentLocale = computed(() => page.props.currentLocale)
+let availableLocales = computed(() => page.props.availableLocales)
 const showingNavigationDropdown = ref(false);
+
+import { useI18n } from 'vue-i18n';
+
+const { locale, t } = useI18n();
+
+const changeLocale = (newLocale) => {
+    locale.value = newLocale;
+    document.documentElement.lang = newLocale;
+
+    axios.post(route('locale.store', {locale:newLocale}))
+        .then(response => {
+            console.log(response.data);
+        })
+        .catch(error => {
+            console.error(error);
+        });
+
+};
+
 </script>
 
 <template>
@@ -16,7 +39,7 @@ const showingNavigationDropdown = ref(false);
             <nav class="bg-white border-b border-gray-100">
                 <!-- Primary Navigation Menu -->
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div class="flex justify-between h-16">
+                    <div class="flex justify-between items-center h-16">
                         <div class="flex">
                             <!-- Logo -->
                             <div class="shrink-0 flex items-center">
@@ -30,18 +53,34 @@ const showingNavigationDropdown = ref(false);
                             <!-- Navigation Links -->
                             <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                                 <NavLink :href="route('dashboard')" :active="route().current('dashboard')">
-                                    Dashboard
+                                    {{$t('Dashboard')}}
                                 </NavLink>
 
                                 <NavLink :href="route('cars.index')" :active="route().current('cars.index')">
-                                    Cars
+                                    {{$t('Cars')}}
                                 </NavLink>
 
                                 <NavLink :href="route('drivers.index')" :active="route().current('drivers.index')">
-                                    Drivers
+                                    {{$t('Drivers')}}
                                 </NavLink>
                             </div>
                         </div>
+
+                        <div class="flex items-center gap-1">
+                            <div class="hidden sm:flex sm:items-center sm:ms-6">
+                                <span
+                                    v-for="(locale_img, locale_name) in availableLocales"
+                                    :key="locale_name"
+                                    :class="{'ml-2 mr-2 text-gray-700': locale_name === currentLocale, 'ml-1 underline ml-2 mr-2': locale_name !== currentLocale}"
+                                >
+
+                              <img v-if="locale_name !== currentLocale" @click="changeLocale(locale_name)" :src="locale_img" :alt="locale_name" class="w-8 cursor-pointer">
+
+                              <span v-else>
+                               <img @click="changeLocale(locale_name)" :src="locale_img" :alt="locale_name" class="w-8 cursor-pointer">
+                              </span>
+    </span>
+                            </div>
 
                         <div class="hidden sm:flex sm:items-center sm:ms-6">
                             <!-- Settings Dropdown -->
@@ -72,13 +111,14 @@ const showingNavigationDropdown = ref(false);
                                     </template>
 
                                     <template #content>
-                                        <DropdownLink :href="route('profile.edit')"> Profile </DropdownLink>
+                                        <DropdownLink :href="route('profile.edit')">{{$t('Profile')}}</DropdownLink>
                                         <DropdownLink :href="route('logout')" method="post" as="button">
-                                            Log Out
+                                            {{$t('Log Out')}}
                                         </DropdownLink>
                                     </template>
                                 </Dropdown>
                             </div>
+                        </div>
                         </div>
 
                         <!-- Hamburger -->
@@ -121,7 +161,7 @@ const showingNavigationDropdown = ref(false);
                 >
                     <div class="pt-2 pb-3 space-y-1">
                         <ResponsiveNavLink :href="route('dashboard')" :active="route().current('dashboard')">
-                            Dashboard
+                            {{$t('Dashboard')}}
                         </ResponsiveNavLink>
                     </div>
 
@@ -135,9 +175,9 @@ const showingNavigationDropdown = ref(false);
                         </div>
 
                         <div class="mt-3 space-y-1">
-                            <ResponsiveNavLink :href="route('profile.edit')"> Profile </ResponsiveNavLink>
+                            <ResponsiveNavLink :href="route('profile.edit')">{{$t('Profile')}}</ResponsiveNavLink>
                             <ResponsiveNavLink :href="route('logout')" method="post" as="button">
-                                Log Out
+                                {{$t('Log Out')}}
                             </ResponsiveNavLink>
                         </div>
                     </div>

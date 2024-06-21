@@ -1,7 +1,7 @@
 import './bootstrap';
 import '../css/app.css';
 
-import { createApp, h } from 'vue';
+import {computed, createApp, h, ref} from 'vue';
 import { createInertiaApp } from '@inertiajs/vue3';
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 import { ZiggyVue } from '../../vendor/tightenco/ziggy';
@@ -16,12 +16,14 @@ const vuetify = createVuetify({
     directives,
 })
 
+import i18n from './i18n/index'; // import your i18n instance
+
 
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 
 import MainLayout from '@/Layouts/MainLayout.vue';
 
-
+import { i18nVue } from 'laravel-vue-i18n';
 
 createInertiaApp({
     title: (title) => `${title} - ${appName}`,
@@ -36,6 +38,7 @@ createInertiaApp({
             .use(plugin)
             .use(ZiggyVue)
             .use(vuetify)
+            .use(i18n) // use the i18n instance here
             .mount(el);
     },
     progress: {

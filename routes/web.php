@@ -7,6 +7,7 @@ use Inertia\Inertia;
 use App\Http\Controllers\CarController;
 use App\Http\Controllers\DriverController;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\LocaleController;
 
 Route::get('/', function () {
 return redirect(route('dashboard'));
@@ -31,5 +32,16 @@ Route::middleware('auth')->group(function () {
 
 });
 
+
+Route::get('language/{locale}', function ($locale) {
+    app()->setLocale($locale);
+    session()->put('locale', $locale);
+    return redirect()->back();
+})->name('language.locale');
+
+
+Route::get('/locale/translations', [LocaleController::class, 'translations'])->name('locale.translations');
+Route::post('/locale/{locale}', [LocaleController::class, 'store'])->name('locale.store');
+Route::get('/locale/current', [LocaleController::class, 'currentLocale'])->name('locale.current');
 
 require __DIR__.'/auth.php';
