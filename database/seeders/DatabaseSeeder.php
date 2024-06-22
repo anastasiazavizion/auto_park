@@ -6,6 +6,7 @@ use App\Models\Car;
 use App\Models\Customer;
 use App\Models\Driver;
 use App\Models\Order;
+use App\Models\OrderStatus;
 use App\Models\Park;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
@@ -23,6 +24,16 @@ class DatabaseSeeder extends Seeder
         User::factory()->create([
             'name' => 'Test User',
             'email' => 'test@example.com',
+        ]);
+
+        OrderStatus::create([
+            'name'=>'Paid',
+            'color'=>'emerald',
+        ]);
+
+        OrderStatus::create([
+            'name'=>'Unpaid',
+            'color'=>'gray',
         ]);
 
 

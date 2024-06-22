@@ -7,6 +7,7 @@ use App\Models\Driver;
 use App\Models\Customer;
 use App\Models\User;
 use App\Models\Car;
+use App\Models\OrderStatus;
 return new class extends Migration
 {
     /**
@@ -20,7 +21,7 @@ return new class extends Migration
             $table->foreignIdFor(Car::class)->constrained('cars');
             $table->foreignIdFor(Driver::class)->constrained('drivers');
             $table->float('total');
-            $table->string('status');
+            $table->foreignIdFor(OrderStatus::class);
             $table->dateTime('start')->nullable();
             $table->dateTime('finish')->nullable();
             $table->timestamps();

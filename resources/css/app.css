@@ -1,3 +1,17 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+    body{
+        font-size: 18px;
+    }
+
+    table {
+        @apply w-full border-collapse border border-slate-400;
+    }
+
+    table th, table td{
+        @apply border border-slate-300 p-2;
+    }
+}
