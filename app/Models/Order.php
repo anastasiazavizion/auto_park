@@ -56,6 +56,11 @@ class Order extends Model
         return $this->belongsTo(Car::class);
 
     }
+    public function driver() : BelongsTo
+    {
+        return $this->belongsTo(Driver::class);
+
+    }
 
 
 

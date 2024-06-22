@@ -42,9 +42,12 @@ class OrderController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Order $order)
     {
-        //
+        $this->authorize('view',$order);
+
+        $order->load(['status','car', 'driver']);
+        return inertia('Orders/Show', compact('order'));
     }
 
     /**

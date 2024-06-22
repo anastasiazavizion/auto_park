@@ -99,13 +99,6 @@ services:
             - 8085:8080
         networks:
             - sail2
-    stripecli:
-        image: stripe/stripe-cli
-        restart: always
-        ports:
-            - 8089:8080
-        networks:
-            - sail2
     selenium:
         image: selenium/standalone-chrome
         extra_hosts:
