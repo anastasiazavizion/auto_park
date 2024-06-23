@@ -21,6 +21,7 @@ class CarFactory extends Factory
         return [
             'model'=>$randomKey,
             'price'=>self::$models[$randomKey],
+            'image' => $this->faker->imageUrl(640, 480, 'cars', true, $randomKey)
         ];
     }
 }
