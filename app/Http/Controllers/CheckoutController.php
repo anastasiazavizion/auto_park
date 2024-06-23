@@ -67,6 +67,24 @@ class CheckoutController extends Controller
         return $lineItems;
     }
 
+    private function getHoursAmount(string $date1, string $date2)
+    {
+        $date1 = new \DateTime($date1);
+        $date2 = new \DateTime($date2);
+        $diff = $date2->diff($date1);
+        $hours = $diff->h;
+        $minutes = $diff->i;
+        if($minutes > 15){
+            $hours++;
+        }
+        return $hours;
+    }
+
+    private function getEndPrice(float $price, int $hours)
+    {
+        return $price * $hours;
+    }
+
     private function createSession($lineItems)
     {
         $stripe = new \Stripe\StripeClient(getenv('STRIPE_SECRET_KEY'));
@@ -81,7 +99,10 @@ class CheckoutController extends Controller
 
     public function checkout(Request $request)
     {
-        $price = $request->get('price');
+        $hours = $this->getHoursAmount($request->start,$request->finish);
+
+        $price = $this->getEndPrice($request->get('price'), $hours);
+
         $lineItems = $this->generateItemsArray($price,$request->get('model'));
         $checkout_session = $this->createSession($lineItems);
 
@@ -89,7 +110,7 @@ class CheckoutController extends Controller
             'total'=>$price,
             'car_id'=>$request->get('car_id'),
             'user_id'=>Auth::id(),
-            'driver_id'=>$request->get('driver')['id'],
+            'driver_id'=>$request->get('driver'),
         ]);
 
         $order->status()->associate(OrderStatus::byName('Unpaid')->first());

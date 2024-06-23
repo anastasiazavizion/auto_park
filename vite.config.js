@@ -5,8 +5,10 @@ import i18n from 'laravel-vue-i18n/vite';
 
 export default defineConfig({
     server: {
-        port: '5174'
+        port: '5174',
+        cors: true // Enable CORS
     },
+
     plugins: [
         laravel({
             input: 'resources/js/app.js',

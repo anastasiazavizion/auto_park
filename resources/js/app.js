@@ -11,10 +11,12 @@ import i18n from './i18n/index'; // import your i18n instance
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 
 import MainLayout from '@/Layouts/MainLayout.vue';
-
 import { i18nVue } from 'laravel-vue-i18n';
 
-createInertiaApp({
+import VueDatePicker from '@vuepic/vue-datepicker';
+import '@vuepic/vue-datepicker/dist/main.css';
+
+ createInertiaApp({
     title: (title) => `${title} - ${appName}`,
     resolve: (name) => {
         const pages = import.meta.glob('./Pages/**/*.vue', { eager: true })
@@ -26,7 +28,8 @@ createInertiaApp({
         return createApp({ render: () => h(App, props) })
             .use(plugin)
             .use(ZiggyVue)
-            .use(i18n) // use the i18n instance here
+            .use(i18n)
+            .component('VueDatePicker', VueDatePicker)
             .mount(el);
     },
     progress: {
