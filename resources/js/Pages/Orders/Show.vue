@@ -14,27 +14,12 @@ const props = defineProps({
 
 <template>
 <Header>Order #{{order.id}}</Header>
-
 <Card>
-
-    <div class="w-1/2">
-
-        <DetailCard label="Date">{{order.created_at}}</DetailCard>
-        <DetailCard label="Total"><Price :price="order.total"/></DetailCard>
-        <DetailCard label="Status"><Status :status="order.status"/></DetailCard>
-        <DetailCard label="Car"><Link :href="route('cars.show', order.car)">{{order.car.model}}</Link></DetailCard>
-        <DetailCard label="Driver"><Link :href="route('drivers.show', order.driver)">{{order.driver.name}}</Link></DetailCard>
-
-        <OrderPayButton :order="order"/>
-    </div>
-
-
-
-
+    <DetailCard label="Date">{{order.created_at}}</DetailCard>
+    <DetailCard label="Total"><Price :price="order.total"/></DetailCard>
+    <DetailCard label="Status"><Status :status="order.status"/></DetailCard>
+    <DetailCard label="Car"><Link :href="route('cars.show', order.car)">{{order.car.model}}</Link></DetailCard>
+    <DetailCard label="Driver"><Link :href="route('drivers.show', order.driver)">{{order.driver.name}}</Link></DetailCard>
+    <OrderPayButton :order="order"/>
 </Card>
-
 </template>
-
-<style scoped>
-
-</style>
