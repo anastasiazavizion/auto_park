@@ -3,7 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
-
+use App\Models\User;
 return new class extends Migration
 {
     /**
@@ -13,8 +13,11 @@ return new class extends Migration
     {
         Schema::create('customers', function (Blueprint $table) {
             $table->id();
+            $table->foreignIdFor(User::class)->constrained('users');
             $table->string('name');
-            $table->string('phone');
+            $table->string('email');
+            $table->string('phone')->nullable();
+            $table->string('country')->nullable();
             $table->timestamps();
         });
     }

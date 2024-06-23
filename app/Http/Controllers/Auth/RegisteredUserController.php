@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\Customer;
 use App\Models\User;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
@@ -43,6 +44,12 @@ class RegisteredUserController extends Controller
         ]);
 
         event(new Registered($user));
+
+        $user->customer()->save(Customer::make([
+            'name'=>$request->name,
+            'email'=>$request->email,
+        ]));
+
 
         Auth::login($user);
 

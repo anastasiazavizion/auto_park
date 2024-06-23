@@ -10,7 +10,7 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Auth;
 use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
-
+use Illuminate\Database\Eloquent\Relations\HasOne;
 class User extends Authenticatable
 {
     use HasFactory, Notifiable, HasSlug;
@@ -66,5 +66,10 @@ class User extends Authenticatable
     public function orders() :HasMany
     {
         return $this->hasMany(Order::class);
+    }
+
+    public function customer() : HasOne
+    {
+        return $this->hasOne(Customer::class);
     }
 }
