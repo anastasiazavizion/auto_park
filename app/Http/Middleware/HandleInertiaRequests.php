@@ -40,7 +40,7 @@ class HandleInertiaRequests extends Middleware
             'availableLocales'=>$availableLocales,
             'auth' => [
                 'user' => $request->user(),
-                'isAdmin' => $request->user()->isAdmin(),
+                'isAdmin' => $request->user() ? $request->user()->isAdmin() : false,
             ],
         ];
     }

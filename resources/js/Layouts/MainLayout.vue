@@ -4,7 +4,7 @@ import Dropdown from '@/Components/Dropdown.vue';
 import DropdownLink from '@/Components/DropdownLink.vue';
 import NavLink from '@/Components/NavLink.vue';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink.vue';
-import {Link, router, usePage} from '@inertiajs/vue3';
+import {usePage} from '@inertiajs/vue3';
 
 let page = usePage()
 let currentLocale = computed(() => page.props.currentLocale)
@@ -126,7 +126,7 @@ const changeLocale = (newLocale) => {
                                     <path
                                         :class="{
                                             hidden: showingNavigationDropdown,
-                                            'inline-flex': !showingNavigationDropdown,
+                                            'inline-flex': !showingNavigationDropdown
                                         }"
                                         stroke-linecap="round"
                                         stroke-linejoin="round"
@@ -136,7 +136,7 @@ const changeLocale = (newLocale) => {
                                     <path
                                         :class="{
                                             hidden: !showingNavigationDropdown,
-                                            'inline-flex': showingNavigationDropdown,
+                                            'inline-flex': showingNavigationDropdown
                                         }"
                                         stroke-linecap="round"
                                         stroke-linejoin="round"

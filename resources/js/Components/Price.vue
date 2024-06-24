@@ -1,8 +1,6 @@
 <script setup>
-const props = defineProps({
-    price:String
-})
+
 </script>
 <template>
-${{props.price}}
+$<slot></slot>
 </template>

@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Database\Eloquent\Builder;
 class Order extends Model
 {
     use HasFactory;
@@ -62,7 +63,10 @@ class Order extends Model
 
     }
 
-
-
-
+    public function scopePaid(Builder $query)
+    {
+        $query->whereHas('status', function ($query){
+            $query->where('name','Paid');
+        });
+    }
 }
