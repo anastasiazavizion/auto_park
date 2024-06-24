@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Enums\PaymentStatus;
+use App\Http\Requests\CheckoutRequest;
 use App\Models\Order;
 use App\Models\Payment;
 use Illuminate\Http\Request;
@@ -97,8 +98,11 @@ class CheckoutController extends Controller
         ]);
     }
 
-    public function checkout(Request $request)
+    public function checkout(CheckoutRequest $request)
     {
+
+        dd($request->validated());
+
         $hours = $this->getHoursAmount($request->start,$request->finish);
 
         $price = $this->getEndPrice($request->get('price'), $hours);
@@ -139,28 +143,22 @@ class CheckoutController extends Controller
     public function webhook()
     {
         $stripe = new \Stripe\StripeClient(getenv('STRIPE_SECRET_KEY'));
-        //whsec_69eb21bda20b8a0ec1177383c410568e43a16b27c7c06f5c7dc03a0e71caf3a0
         $endpoint_secret = 'whsec_69eb21bda20b8a0ec1177383c410568e43a16b27c7c06f5c7dc03a0e71caf3a0';
 
         $payload = @file_get_contents('php://input');
         $sig_header = $_SERVER['HTTP_STRIPE_SIGNATURE'];
-        $event = null;
 
         try {
             $event = \Stripe\Webhook::constructEvent(
                 $payload, $sig_header, $endpoint_secret
             );
         } catch(\UnexpectedValueException $e) {
-            // Invalid payload
             http_response_code(400);
             exit();
         } catch(\Stripe\Exception\SignatureVerificationException $e) {
-            // Invalid signature
             http_response_code(400);
             exit();
         }
-
-// Handle the event
         switch ($event->type) {
             case 'checkout.session.completed':
                 $dataPayment = $event->data->object;
@@ -171,10 +169,10 @@ class CheckoutController extends Controller
                 }catch (NotFoundHttpException $e){
                     return redirect(route('checkout.fail'));
                 }
+                break;
             default:
                 echo 'Received unknown event type ' . $event->type;
         }
-
         return response('', 200);
 
     }

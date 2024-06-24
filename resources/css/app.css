@@ -15,3 +15,11 @@
         @apply border border-slate-300 p-2;
     }
 }
+@layer components {
+   .errorInput > div{
+       @apply  border border-red-600;
+   }
+    .errorInput > div:nth-child(1){
+       @apply  border-r-0;
+   }
+}
