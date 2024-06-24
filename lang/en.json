@@ -12,5 +12,10 @@
     "Name": "Name",
     "Phone": "Phone",
     "Driver": "Driver",
-    "Driver cars": "Driver cars"
+    "Driver cars": "Driver cars",
+    "Orders": "Orders",
+    "Price/Hour": "Price/Hour",
+    "Start date": "Start date",
+    "Finish date": "Finish date",
+    "Select": "Select"
 }

@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Builder;
 class Order extends Model
 {
     use HasFactory;
-    protected $fillable = ['total', 'car_id', 'user_id', 'driver_id', 'status'];
+    protected $fillable = ['total', 'car_id', 'user_id', 'driver_id', 'status', 'start', 'finish'];
 
     protected $appends = ['is_paid'];
 
@@ -68,5 +68,19 @@ class Order extends Model
         $query->whereHas('status', function ($query){
             $query->where('name','Paid');
         });
+    }
+
+    protected function start(): Attribute
+    {
+        return Attribute::make(
+            set: fn (string $value) => date('Y-m-d H:i:s', strtotime($value)),
+        );
+    }
+
+    protected function finish(): Attribute
+    {
+        return Attribute::make(
+            set: fn (string $value) => date('Y-m-d H:i:s', strtotime($value)),
+        );
     }
 }

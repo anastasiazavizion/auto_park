@@ -4,11 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Enums\PaymentStatus;
 use App\Http\Requests\CheckoutRequest;
+use App\Mail\NewOrderMailAdmin;
 use App\Models\Order;
 use App\Models\Payment;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\OrderStatus;
+use Illuminate\Support\Facades\Mail;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class CheckoutController extends Controller
@@ -25,6 +28,11 @@ class CheckoutController extends Controller
             $order = $payment->order;
             $order->status()->associate(OrderStatus::byName('Paid')->first());
             $order->save();
+
+            $adminUsers = User::admin()->get();
+            foreach ([...$adminUsers,$order->user] as $user){
+                Mail::to($user)->send(new NewOrderMailAdmin($order));
+            }
         }
     }
     public function success(Request $request)
@@ -73,7 +81,7 @@ class CheckoutController extends Controller
         $date1 = new \DateTime($date1);
         $date2 = new \DateTime($date2);
         $diff = $date2->diff($date1);
-        $hours = $diff->h;
+        $hours = ($diff->days * 24) + $diff->h;
         $minutes = $diff->i;
         if($minutes > 15){
             $hours++;
@@ -100,9 +108,6 @@ class CheckoutController extends Controller
 
     public function checkout(CheckoutRequest $request)
     {
-
-        dd($request->validated());
-
         $hours = $this->getHoursAmount($request->start,$request->finish);
 
         $price = $this->getEndPrice($request->get('price'), $hours);
@@ -115,6 +120,8 @@ class CheckoutController extends Controller
             'car_id'=>$request->get('car_id'),
             'user_id'=>Auth::id(),
             'driver_id'=>$request->get('driver'),
+            'start'=>$request->get('start'),
+            'finish'=>$request->get('finish'),
         ]);
 
         $order->status()->associate(OrderStatus::byName('Unpaid')->first());

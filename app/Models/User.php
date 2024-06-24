@@ -5,6 +5,8 @@ namespace App\Models;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Builder;
+
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Auth;
@@ -71,5 +73,10 @@ class User extends Authenticatable
     public function customer() : HasOne
     {
         return $this->hasOne(Customer::class);
+    }
+
+    public function scopeAdmin(Builder $query)
+    {
+        $query->where('is_admin', true);
     }
 }
