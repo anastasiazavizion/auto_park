@@ -28,7 +28,7 @@ const props = defineProps({
                 <td><Link :href="route('orders.show', order.id)">{{order.id}}</Link></td>
                 <td>{{order.created_at}}</td>
                 <td><Status :status="order.status"/></td>
-                <td><Price :price="order.total"/></td>
+                <td><Price>{{order.total}}</Price></td>
                 <td>
                     <OrderPayButton :order="order"/>
                 </td>

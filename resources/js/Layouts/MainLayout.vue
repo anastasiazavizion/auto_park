@@ -11,8 +11,6 @@ let currentLocale = computed(() => page.props.currentLocale)
 let availableLocales = computed(() => page.props.availableLocales)
 const isAdmin = computed(() => page.props.auth.isAdmin)
 
-console.log(isAdmin);
-
 const showingNavigationDropdown = ref(false);
 
 import { useI18n } from 'vue-i18n';
