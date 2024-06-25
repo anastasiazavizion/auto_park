@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Enums\PaymentStatus;
 use App\Http\Requests\CheckoutRequest;
+use App\Jobs\NotifyUsersOrderWasCreated;
 use App\Mail\NewOrderMailAdmin;
 use App\Models\Order;
 use App\Models\Payment;
@@ -29,10 +30,7 @@ class CheckoutController extends Controller
             $order->status()->associate(OrderStatus::byName('Paid')->first());
             $order->save();
 
-            $adminUsers = User::admin()->get();
-            foreach ([...$adminUsers,$order->user] as $user){
-                Mail::to($user)->send(new NewOrderMailAdmin($order));
-            }
+            NotifyUsersOrderWasCreated::dispatch($order);
         }
     }
     public function success(Request $request)
@@ -52,7 +50,6 @@ class CheckoutController extends Controller
         }catch (\Exception $exception){
             abort(404);
         }
-
     }
 
     public function fail(Request $request)
