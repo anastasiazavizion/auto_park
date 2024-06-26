@@ -12,7 +12,7 @@ class CarController extends Controller
      */
     public function index()
     {
-        return inertia('Cars/Index', ['cars'=>Car::withPark()->withDrivers()->get()]);
+        return inertia('Cars/Index', ['cars'=>Car::withPark()->withDrivers()->paginate(5)]);
     }
 
     /**

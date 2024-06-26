@@ -2,12 +2,13 @@
 import Card from "@/Components/Card.vue";
 import { Link } from '@inertiajs/vue3';
 import Price from "@/Components/Price.vue";
-const props = defineProps({
-    cars:Array
+import Pagination from "@/Components/Pagination.vue";
+defineProps({
+    cars:Object
 })
 </script>
 <template>
-    <div :v-key="car.id" v-for="car in cars">
+    <div :v-key="car.id" v-for="car in cars.data">
         <Card>
             <div class="grid grid-cols-3">
                 <div class="flex flex-col">
@@ -21,4 +22,5 @@ const props = defineProps({
             </div>
         </Card>
     </div>
+    <Pagination :data="cars.links"/>
 </template>

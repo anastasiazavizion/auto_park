@@ -17,9 +17,7 @@ class OrderController extends Controller
         $query->when(!Auth::user()->isAdmin(), function ($q) {
             return $q->where('user_id', Auth::id());
         });
-        $orders = $query->get();
-
-
+        $orders = $query->paginate(10);
         return inertia('Orders/Index', compact('orders'));
     }
 

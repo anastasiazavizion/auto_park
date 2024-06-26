@@ -5,8 +5,9 @@ import {Link} from "@inertiajs/vue3";
 import OrderPayButton from "@/Pages/Orders/Partials/OrderPayButton.vue";
 import Header from "@/Components/Header.vue";
 import Card from "@/Components/Card.vue";
-const props = defineProps({
-    orders:Array
+import Pagination from "@/Components/Pagination.vue";
+defineProps({
+    orders:Object
 })
 </script>
 
@@ -24,7 +25,7 @@ const props = defineProps({
             </tr>
             </thead>
             <tbody>
-            <tr v-for="order in props.orders" :key="order.id">
+            <tr v-for="order in orders.data" :key="order.id">
                 <td><Link :href="route('orders.show', order.id)">{{order.id}}</Link></td>
                 <td>{{order.created_at}}</td>
                 <td><Status :status="order.status"/></td>
@@ -36,4 +37,5 @@ const props = defineProps({
             </tbody>
         </table>
     </Card>
+    <Pagination :data="orders.links"/>
 </template>
