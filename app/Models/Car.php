@@ -14,6 +14,10 @@ class Car extends Model
 {
     use HasFactory;
 
+    protected $appends = ['image'];
+
+    protected $fillable = ['model','price', 'park_id'];
+
     public function park() :BelongsTo
     {
         return $this->belongsTo(Park::class);
@@ -39,4 +43,16 @@ class Car extends Model
         return $this->hasMany(Order::class);
 
     }
+
+    public function images() : HasMany
+    {
+        return $this->hasMany(CarImage::class)->orderBy('order');
+
+    }
+
+   public function getImageAttribute()
+    {
+        return $this->images()->count() > 0 ? $this->images->get(0)->url : null;
+    }
+
 }

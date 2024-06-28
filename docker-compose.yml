@@ -107,6 +107,15 @@ services:
             - '/dev/shm:/dev/shm'
         networks:
             - sail2
+    phpmyadmin:
+        image: phpmyadmin
+        restart: always
+        ports:
+            - 8090:80
+        environment:
+            - PMA_ARBITRARY=1
+        networks:
+            - sail2
 networks:
     sail2:
         driver: bridge

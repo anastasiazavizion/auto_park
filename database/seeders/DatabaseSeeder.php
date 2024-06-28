@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Car;
+use App\Models\CarImage;
 use App\Models\Customer;
 use App\Models\Driver;
 use App\Models\Order;
@@ -21,7 +22,7 @@ class DatabaseSeeder extends Seeder
     {
         // User::factory(10)->create();
 
-        User::factory()->create([
+       User::factory()->create([
             'name' => 'Test User',
             'email' => 'test@example.com',
         ]);
@@ -43,10 +44,11 @@ class DatabaseSeeder extends Seeder
 
             Car::factory(2)->create(['park_id'=>$park->id])->each(function ($car) use ($driver){
                 $car->drivers()->attach($driver);
+
+                $image = CarImage::factory()->make();
+                $car->images()->save($image);
             });
 
         });
-
-
     }
 }
