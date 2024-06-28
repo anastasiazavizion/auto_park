@@ -60,7 +60,7 @@
          </div>
 
          <div>
-             <PrimaryButton class="text-center"  type="submit">{{$t('Add')}}</PrimaryButton>
+             <PrimaryButton class="text-center"  type="submit">{{$t('Update')}}</PrimaryButton>
          </div>
 
      </form>
@@ -73,13 +73,14 @@
 
 <script setup>
 import PrimaryButton from "@/Components/PrimaryButton.vue";
-import {useForm} from '@inertiajs/vue3';
+import {router, useForm} from '@inertiajs/vue3';
 import Card from "@/Components/Card.vue";
 import Header from "@/Components/Header.vue";
 import InputLabel from "@/Components/InputLabel.vue";
 import TextInput from "@/Components/TextInput.vue";
 import InputError from "@/Components/InputError.vue";
 import ImagePreview from "@/Pages/Cars/Partials/ImagePreview.vue";
+import {watch} from "vue";
 
 const props = defineProps({
     parks:Array,
@@ -99,10 +100,9 @@ const form = useForm({
 });
 
 function saveCar(){
-    form.put(route('cars.update', props.car.id), {
-        onSuccess: (page) => {
-        },
-    });
+    router.post(route('cars.update', props.car.id), {
+        _method: 'put',
+        ...form
+    })
 }
-
 </script>

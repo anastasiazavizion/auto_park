@@ -2,9 +2,24 @@
 <Card>
  <Header>{{props.car.model}}</Header>
 
- <div class="flex w-full gap-4">
-     <div class="w-1/2"><img :src="props.car.image" :alt="props.car.model"></div>
-     <div class="w-1/2">
+<div class="flex gap-4">
+
+ <div class="md:w-1/4">
+     <div class="w-full">
+         <img class="rounded-md w-80 h-80" :src="activeImageUrl" :alt="car.model">
+     </div>
+     <div class="flex gap-4 mt-4">
+         <div
+             v-for="image in car.images"
+             :key="image.id"
+             @click="activateImage(image.url)"
+         >
+             <img class="rounded-md w-20 h-20 cursor-pointer" :src="image.url" :alt="car.model">
+         </div>
+     </div>
+ </div>
+
+<div class="md:w-3/4">
          <DetailCard :class="[form.errors.price ? 'errorInput' : '']" :label="$t('Price/Hour')">{{props.car.price}}</DetailCard>
          <Error v-if="form.errors.price">{{form.errors.price}}</Error>
          <DetailCard :class="[form.errors.address ? 'errorInput' : '']" :label="$t('Address')">{{props.car.park.address}}</DetailCard>
@@ -24,9 +39,10 @@
          <DetailCard :class="[form.errors.finish ? 'errorInput':'']"  :label="$t('Finish date')"><VueDatePicker v-model="form.finish" /> </DetailCard>
          <Error v-if="form.errors.finish">{{form.errors.finish}}</Error>
 
-     </div>
+</div>
 
- </div>
+</div>
+
 
 <div class="mt-4 text-center">
     <form  @submit.prevent="checkout">
@@ -45,6 +61,7 @@ import Card from "@/Components/Card.vue";
 import Header from "@/Components/Header.vue";
 import DetailCard from "@/Components/DetailCard.vue";
 import Error from "@/Components/Error.vue";
+import {computed, ref} from "vue";
 
 const props = defineProps({
     car:Object
@@ -67,4 +84,11 @@ function checkout(){
 }
 
 
+const activeImage = ref(0);
+
+const activeImageUrl = ref(props.car.image);
+
+function activateImage(url) {
+    activeImageUrl.value = url;
+}
 </script>

@@ -17,5 +17,9 @@
     "Price/Hour": "Price/Hour",
     "Start date": "Start date",
     "Finish date": "Finish date",
-    "Select": "Select"
+    "Select": "Select",
+    "Edit car": "Edit car",
+    "Delete car": "Delete car",
+    "Add": "Add",
+    "Update": "Update"
 }

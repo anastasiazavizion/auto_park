@@ -1,19 +1,16 @@
 <?php
-
 namespace App\Http\Controllers;
-
 use App\Http\Requests\CarRequest;
 use App\Http\Requests\CarUpdateRequest;
 use App\Models\Car;
-use App\Models\CarImage;
 use App\Models\Driver;
 use App\Models\Park;
+use App\Services\CarService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 
 class CarController extends Controller
 {
-    public function __construct()
+    public function __construct(public CarService $carService)
     {
         $this->middleware('admin')->except(['index', 'show']);
     }
@@ -33,40 +30,16 @@ class CarController extends Controller
     {
         $parks = Park::all();
         $drivers = Driver::all();
-
         return inertia('Cars/Create', compact('parks', 'drivers'));
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(CarRequest $request)
+    public function store(Request $request)
     {
-      $validated = $request->validated();
-       $car = Car::create([
-            'price'=>$validated['price'],
-            'model'=>$validated['model'],
-            'park_id'=>$validated['park']
-        ]);
-        $car->drivers()->attach($validated['drivers']);
-        $images = $validated['images'];
-        foreach ($images as $image){
-            $mimeType = $image->getClientMimeType();
-            $size = $image->getSize();
-            $path = $image->store('cars', 'public');
-            $url = Storage::url($path);
-
-            $carImage = CarImage::make([
-                'path'=>$path,
-                'url'=>$url,
-                'mime'=>$mimeType,
-                'size'=>$size
-            ]);
-
-            $car->images()->save($carImage);
-
-        }
-        return redirect(route('cars.index'));
+        $car = $this->carService->createCar($request->validated());
+        return redirect(route('cars.show', $car));
     }
 
     /**
@@ -76,7 +49,6 @@ class CarController extends Controller
     {
         $car->load(['drivers','park']);
         return inertia('Cars/Show', ['car'=>$car]);
-
     }
 
     /**
@@ -85,9 +57,7 @@ class CarController extends Controller
     public function edit(Car $car)
     {
         $car->load(['drivers:id', 'images']);
-
         $car->drivers_ids = $car->drivers->pluck('id')->toArray();
-
         $parks = Park::all();
         $drivers = Driver::all();
         return inertia('Cars/Edit', compact('parks', 'drivers', 'car'));
@@ -98,50 +68,16 @@ class CarController extends Controller
      */
     public function update(CarUpdateRequest $request, Car $car)
     {
-        $validated = $request->validated();
-
-       $car->update([
-            'price'=>$validated['price'],
-            'model'=>$validated['model'],
-            'park_id'=>$validated['park']
-        ]);
-
-        $car->drivers()->sync($validated['drivers']);
-
-        if(!empty($validated['images'])){
-            $images = $validated['images'];
-            foreach ($images as $image){
-                $mimeType = $image->getClientMimeType();
-                $size = $image->getSize();
-                $path = $image->store('cars', 'public');
-                $url = Storage::url($path);
-                $carImage = CarImage::make([
-                    'path'=>$path,
-                    'url'=>$url,
-                    'mime'=>$mimeType,
-                    'size'=>$size
-                ]);
-                $car->images()->save($carImage);
-            }
-        }
-
-        $deletedImages = $validated['deleted_images'];
-
-        foreach ($deletedImages as $image){
-            $carImage = CarImage::find($image);
-            Storage::disk('public')->delete($carImage->path);
-            $carImage->delete();
-        }
-
+        $this->carService->updateCar($car, $request->validated());
         return redirect(route('cars.show', $car));
-
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Car $car)
     {
-        //
+        $car->delete();
+        return redirect()->route('cars.index');
     }
 }

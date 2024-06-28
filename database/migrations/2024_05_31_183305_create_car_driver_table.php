@@ -15,8 +15,8 @@ return new class extends Migration
     {
         Schema::create('car_driver', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(Car::class)->constrained('cars');
-            $table->foreignIdFor(Driver::class)->constrained('drivers');
+            $table->foreignIdFor(Car::class)->constrained('cars')->cascadeOnDelete();
+            $table->foreignIdFor(Driver::class)->constrained('drivers')->cascadeOnDelete();
             $table->timestamps();
         });
     }
