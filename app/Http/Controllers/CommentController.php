@@ -2,17 +2,20 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Driver;
+use App\Http\Requests\CommentRequest;
+use App\Models\Comment;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
-class DriverController extends Controller
+
+class CommentController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        return inertia('Drivers/Index', ['drivers'=>Driver::with('cars')->get()]);
+        //
     }
 
     /**
@@ -26,18 +29,37 @@ class DriverController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(CommentRequest $request)
     {
-        //
+        $data = $request->validated();
+
+        $model = app($data['type']);
+
+
+
+        $model->find($data['id'])->comments()->create([
+            'text'=>$data['text'],
+            'parent_comment_id'=>$data['parent_id'] ?? null,
+            'user_id'=>Auth::id()
+        ]);
+
+        return redirect()->back()->with('success', 'Comment was added');
+
+    }
+
+    public function reply(Request $request, Comment $comment)
+    {
+
+        dd($request);
+
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Driver $driver)
+    public function show(string $id)
     {
-        $driver->load(['cars', 'comments.user']);
-        return inertia('Drivers/Show', ['driver'=>$driver]);
+        //
     }
 
     /**

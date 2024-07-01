@@ -9,6 +9,7 @@ use App\Http\Controllers\DriverController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\LocaleController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\CommentController;
 Route::get('/', function () {
 return redirect(route('dashboard'));
 });
@@ -26,6 +27,9 @@ Route::middleware('auth')->group(function () {
     Route::resource('cars',CarController::class);
     Route::resource('drivers',DriverController::class);
     Route::resource('orders',OrderController::class);
+    Route::resource('comments',CommentController::class);
+    Route::post('comments/reply/{id}',[CommentController::class, 'reply'])->name('comments.reply');
+
 
     Route::post('/order/checkout', [\App\Http\Controllers\CheckoutController::class, 'checkout'])->name('order.checkout');
     Route::post('/order/checkout/{order}', [\App\Http\Controllers\CheckoutController::class, 'checkoutOrder'])->name('order.checkoutOrder');

@@ -15,6 +15,13 @@ class CarController extends Controller
         $this->middleware('admin')->except(['index', 'show']);
     }
 
+    public function loadNestedComments($query)
+    {
+        return $query->with(['user', 'childrens' => function ($query) {
+            $this->loadNestedComments($query);
+        }]);
+    }
+
     /**
      * Display a listing of the resource.
      */
@@ -47,7 +54,15 @@ class CarController extends Controller
      */
     public function show(Car $car)
     {
-        $car->load(['drivers','park']);
+        $car->load([
+            'drivers',
+            'park',
+            'comments' => function ($query) {
+                $query->whereNull('parent_comment_id')
+                    ->withNestedComments();
+            }
+        ]);
+
         return inertia('Cars/Show', ['car'=>$car]);
     }
 

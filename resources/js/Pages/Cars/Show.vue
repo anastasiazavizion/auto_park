@@ -8,7 +8,7 @@
      <div class="w-full">
          <img class="rounded-md w-80 h-80" :src="activeImageUrl" :alt="car.model">
      </div>
-     <div class="flex gap-4 mt-4">
+     <div v-if="showImagesSlider" class="flex gap-4 mt-4">
          <div
              v-for="image in car.images"
              :key="image.id"
@@ -44,6 +44,9 @@
 </div>
 
 
+<AddNewComment :id="car.id" type="App\Models\Car"></AddNewComment>
+<Comments :comments="car.comments" :id="car.id" type="App\Models\Car"></Comments>
+
 <div class="mt-4 text-center">
     <form  @submit.prevent="checkout">
         <PrimaryButton class="w-1/2 text-center"  type="submit">{{$t('Rent')}}</PrimaryButton>
@@ -62,10 +65,14 @@ import Header from "@/Components/Header.vue";
 import DetailCard from "@/Components/DetailCard.vue";
 import Error from "@/Components/Error.vue";
 import {computed, ref} from "vue";
+import Comments from "@/Components/Comments.vue";
+import AddNewComment from "@/Components/AddNewComment.vue";
 
 const props = defineProps({
     car:Object
 })
+
+const showImagesSlider = computed(()=> props.car.images.length > 1)
 
 const form = useForm({
     car_id: props.car.id,
@@ -78,13 +85,10 @@ const form = useForm({
 
 function checkout(){
     form.post(route('order.checkout'), {
-        onSuccess: (page) => {
+        onSuccess: () => {
         },
     });
 }
-
-
-const activeImage = ref(0);
 
 const activeImageUrl = ref(props.car.image);
 
