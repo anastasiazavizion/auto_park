@@ -57,9 +57,6 @@
 
          <div>
              <ImagePreview :images="[]" v-model="form.images"></ImagePreview>
-             <pre>
-                 {{form.images}}
-             </pre>
          </div>
 
          <div>

@@ -7,7 +7,9 @@ import ResponsiveNavLink from '@/Components/ResponsiveNavLink.vue';
 import {usePage} from '@inertiajs/vue3';
 
 let page = usePage()
+
 let currentLocale = computed(() => page.props.currentLocale)
+let success = computed(() => page.props.success)
 let availableLocales = computed(() => page.props.availableLocales)
 const isAdmin = computed(() => page.props.auth.isAdmin)
 
@@ -186,6 +188,9 @@ const changeLocale = (newLocale) => {
 
             <!-- Page Content -->
             <main class="container mx-auto p-4 max-w-7xl">
+                <div class="inline-block font-bold bg-green-500 text-white rounded-md p-2 mb-4" v-if="success">
+                    {{success}}
+                </div>
                 <slot />
             </main>
         </div>

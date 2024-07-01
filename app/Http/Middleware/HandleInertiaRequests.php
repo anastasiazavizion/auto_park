@@ -34,10 +34,12 @@ class HandleInertiaRequests extends Middleware
             'ua'=>asset('/images/languages/ua.png'),
         ];
 
+
         return [
             ...parent::share($request),
             'currentLocale'=>session()->get('locale') ?? '',
             'availableLocales'=>$availableLocales,
+            'success' => $request->session()->get('success'),
             'auth' => [
                 'user' => $request->user(),
                 'isAdmin' => $request->user() ? $request->user()->isAdmin() : false,

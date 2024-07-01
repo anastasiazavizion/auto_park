@@ -36,10 +36,10 @@ class CarController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(CarRequest $request)
     {
         $car = $this->carService->createCar($request->validated());
-        return redirect(route('cars.show', $car));
+        return redirect(route('cars.show', $car))->with('success', 'Car was created');
     }
 
     /**
